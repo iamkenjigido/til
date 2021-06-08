@@ -5,23 +5,23 @@ import (
 	"math"
 )
 
-// 洗濯乾燥機です
 type Machine struct {
+	// 洗濯乾燥機です
 	washing Washing
 	drying Drying
 }
-// 洗濯機部分です
 type Washing struct {
+	// 洗濯機部分です
 	power int
 	time int
 }
-// 乾燥機部分です
 type Drying struct {
+	// 乾燥機部分です
 	power int
 	time int
 }
-// 汚れた衣類です
 type Clothing struct {
+	// 汚れた衣類です
 	kind string
 	level int
 	volume int
@@ -30,32 +30,37 @@ type Clothing struct {
 
 // 洗濯機の強さと洗う時間を決めます
 func (m *Machine) setWashingStrength(strength, timer int) error {
-	if strength > 10 {
-		return fmt.Errorf("強さが10より大きくなっています")
+
+	if err := validates(strength, timer) ; err != nil {
+		return fmt.Errorf("検証に失敗しました。%s \n", err)
 	}
+
 	m.washing.power = strength
-
-	if timer > 10 {
-		return fmt.Errorf("時間が10より大きくなっています")
-	}
 	m.washing.time = timer
-
 	return nil
 }
 
 // 乾燥機の強さと乾燥時間を決めます
 func (m *Machine) setDryingStrength(strength, timer int) error {
+
+	if err := validates(strength, timer); err != nil {
+		return fmt.Errorf("検証に失敗しました。%s \n", err)
+	}
+
+	m.drying.power = strength
+	m.drying.time = timer
+	return  nil
+}
+
+// 洗濯機と乾燥機の強さと時間の検証
+func validates(strength, timer int) error {
 	if strength > 10 {
 		return fmt.Errorf("強さが10より大きくなっています")
 	}
-	m.drying.power = strength
-
 	if timer > 10 {
 		return fmt.Errorf("時間が10より大きくなっています")
 	}
-	m.drying.time = timer
-
-	return  nil
+	return nil
 }
 
 // 衣類の汚れ具合と量を決めます
