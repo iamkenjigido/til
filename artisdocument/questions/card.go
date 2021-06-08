@@ -1,41 +1,58 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
-type cardNum int
-
-type card struct {
-	num cardNum
+type Card struct {
+	num []int
 }
 
-type cardHolder struct {
-	sortCard cardNum
+type Holder struct {
+	card Card
 }
 
-func (c card) makeCard() {
-	for i := 1; i <= 100; i++ {
-		c.num = cardNum(i)
+type Reader struct {
+	holder Holder
+}
+
+// 100枚のカードを作る
+func (c *Card) makeCard() {
+	for i := 100; i >= 1; i-- {
+		c.num = append(c.num, i)
 	}
 }
 
-func (c cardHolder) sort() {
-
+// holderがソートしてcardを持つ
+func (h *Holder) sort() {
+	sort.Ints(h.card.num)
 }
 
-func FizzBuzz(number int) {
+func (r *Reader) read() {
+	for _, n := range r.holder.card.num {
+		fizzBuzz(n)
+	}
+}
+
+func fizzBuzz(number int) {
 	if number % 15 == 0 {
 		fmt.Println("FizzBuzz")
 	} else if number % 5 == 0 {
 		fmt.Println("Buzz")
 	} else if number % 3 == 0 {
 		fmt.Println("Fizz")
+	} else {
+		fmt.Println(number)
 	}
 }
 
+
 func main() {
-
-
-
-
-	FizzBuzz(45)
+	cards := Card{}
+	cards.makeCard()
+	holder := Holder{card: cards}
+	holder.sort()
+	reader := Reader{holder: holder}
+	reader.read()
 }
