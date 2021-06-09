@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"sort"
-
-	//"sort"
 )
 
 type Card struct {
@@ -25,48 +23,55 @@ func (c *Card) makeCard(num int) {
 }
 
 //holderがカードを持つ
-func (h *Holder) addCard(cards []Card) {
+func (h Holder) addCard(cards []Card) {
 	for _, card := range cards {
 		h.card = append(h.card, card)
 	}
 }
-// ------------------------------- addCardから
 
 //holderがソートしてcardを持つ
-func (h *Holder) sort() {
-
+func (h *Holder) sort(cards []Card) []Card {
+	sort.Slice(cards, func(i, j int) bool {
+		return cards[i].num < cards[j].num
+	})
+	return cards
 }
 
-func (r *Reader) read() {
-	for _, n := range r.holder.card.num {
-		fizzBuzz(n)
+//func (r *Reader) read() {
+//	for _, n := range r.holder.card {
+//		fizzBuzz(n)
+//	}
+//}
+func (r Reader) read(cards []Card) {
+	for _, card := range cards {
+		fizzBuzz(card)
 	}
 }
 
-func fizzBuzz(number int) {
-	if number % 15 == 0 {
+func fizzBuzz(number Card) {
+	if number.num%15 == 0 {
 		fmt.Println("FizzBuzz")
-	} else if number % 5 == 0 {
+	} else if number.num%5 == 0 {
 		fmt.Println("Buzz")
-	} else if number % 3 == 0 {
+	} else if number.num%3 == 0 {
 		fmt.Println("Fizz")
 	} else {
-		fmt.Println(number)
+		fmt.Println(number.num)
 	}
 }
 
-
 func main() {
+
 	card := Card{}
 	var cards []Card
-	for i := 0; i < 100; i++ {
+	for i := 100; i > 0; i-- {
 		card.makeCard(i)
 		cards = append(cards, card)
 	}
 	holder := Holder{}
 	holder.addCard(cards)
-	holder.sort()
-	//fmt.Println(holder.card)
-	//reader := Reader{holder: holder}
-	//reader.read()
+	holder.sort(cards)
+	fmt.Println(cards)
+	reader := Reader{}
+	reader.read(cards)
 }
