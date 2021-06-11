@@ -32,30 +32,30 @@ func MakeScore(score int) Score {
 	return s
 }
 
-func (c Child) MakeChildDate(data map[string]int) []Child {
+func (c Child) SetChildDate(data map[string]int) []Child {
 	var children []Child
 	for k, v := range data {
-		c.SetChildData(k, v)
+		c.ChildData(k, v)
 		children = append(children, c)
 	}
 	return children
 }
 
-func (c Class) MakeClassData(childrenMap map[string][]Child) []Class {
+func (c Class) SetClassData(childrenMap map[string][]Child) []Class {
 	var classes []Class
 	for k, v := range childrenMap {
-		c.SetClassData(k, v)
+		c.ClassData(k, v)
 		classes = append(classes, c)
 	}
 	return classes
 }
 
-func (c *Child) SetChildData(name string, score int) {
+func (c *Child) ChildData(name string, score int) {
 	c.name = MakeName(name)
 	c.score = MakeScore(score)
 }
 
-func (c *Class) SetClassData(name string, child []Child) {
+func (c *Class) ClassData(name string, child []Child) {
 	c.name = name
 	c.child = child
 }
@@ -64,7 +64,7 @@ func (s School) Announce() {
 	for _, c := range s.class {
 		fmt.Printf("クラス名: %s \n", c.name)
 		c.Print()
-		fmt.Println()
+		//fmt.Println()
 	}
 }
 
@@ -92,19 +92,20 @@ func main() {
 		"B": 90,
 		"C": 100,
 	}
-	childrenFlower := child.MakeChildDate(flowerData)
+	childrenFlower := child.SetChildDate(flowerData)
 
 	var moonDate = map[string]int{
 		"D": 60,
 		"E": 100,
 		"F": 30,
 	}
-	childrenMoon := child.MakeChildDate(moonDate)
+	childrenMoon := child.SetChildDate(moonDate)
 
-	var snowData = map[string]int{"G": 50,
+	var snowData = map[string]int{
+		"G": 50,
 		"H": 90,
 	}
-	childrenSnow := child.MakeChildDate(snowData)
+	childrenSnow := child.SetChildDate(snowData)
 
 	class := Class{}
 	var childrenMap = map[string][]Child{
@@ -112,7 +113,7 @@ func main() {
 		"月組": childrenMoon,
 		"雪組": childrenSnow,
 	}
-	classes := class.MakeClassData(childrenMap)
+	classes := class.SetClassData(childrenMap)
 
 	school := School{}
 	school.class = classes
